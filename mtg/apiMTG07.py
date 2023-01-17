@@ -26,6 +26,9 @@ def main():
     # This is much easier than using the urllib.request library
     cards = resp.json()
 
+    with open("card.txt", "w") as cardfile:
+        cardfile.write(str(cards))
+
     print(cards)
 
 if __name__ == "__main__":
