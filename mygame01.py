@@ -35,7 +35,6 @@ inventory = []
 # a dictionary linking a room to other rooms
 with open("rooms.json", "r") as roomsfile:
     rooms = json.load(roomsfile)
-    print(rooms)
 # start the player in the Hall
 currentRoom = 'Hall'
 
