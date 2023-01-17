@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import json
 """Driving a simple game framework with
    a dictionary object | Alta3 Research"""
 
@@ -18,6 +19,8 @@ def showStatus():
     # print the player's current location
     print('---------------------------')
     print('You are in the ' + currentRoom)
+    print(rooms[currentRoom]["description"])
+    print("Move count: " + str(move_count))
     # print what the player is carrying
     print('Inventory:', inventory)
     # check if there's an item in the room, if so print it
@@ -30,40 +33,16 @@ def showStatus():
 inventory = []
 
 # a dictionary linking a room to other rooms
-rooms = {
-
-            'Hall' : {
-                  'north' : 'Attic',
-                  'south' : 'Kitchen',
-                  'east' : 'Dining Room',
-                  'item' : 'key'
-                },
-
-            'Kitchen' : {
-                  'north' : 'Hall',
-                  'item' : 'monster'
-                },
-            'Dining Room' : {
-                'west' : 'Hall',
-                'south' : 'Garden',
-                'item' : 'potion'
-                },
-            'Garden' : {
-                'north' : 'Dining Room'
-                },
-            'Attic' : {
-                'south' : 'Hall',
-                'item' : 'sword'
-                }
-
-         }
-
+with open("rooms.json", "r") as roomsfile:
+    rooms = json.load(roomsfile)
+    print(rooms)
 # start the player in the Hall
 currentRoom = 'Hall'
 
 showInstructions()
 
 # breaking this while loop means the game is over
+move_count = 0
 while True:
     showStatus()
 
@@ -77,13 +56,13 @@ while True:
     # .lower() makes it lower case, .split() turns it to a list
     # therefore, "get golden key" becomes ["get", "golden key"]          
     move = move.lower().split(" ", 1)
-
     #if they type 'go' first
     if move[0] == 'go':
         #check that they are allowed wherever they want to go
         if move[1] in rooms[currentRoom]:
             #set the current room to the new room
             currentRoom = rooms[currentRoom][move[1]]
+            move_count += 1
         # if they aren't allowed to go that way:
         else:
             print('You can\'t go that way!')
