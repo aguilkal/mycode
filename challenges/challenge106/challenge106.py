@@ -4,8 +4,13 @@ from flask import Flask
 from flask import redirect
 from flask import request
 from flask import render_template
+import trivia_question
 
 app = Flask(__name__)
+
+question_answer_key = trivia_question.api_retriever()
+question = question_answer_key["question"]
+answer = question_answer_key["correct"]
 
 @app.route("/correct")
 def success():
@@ -16,12 +21,12 @@ def unsuccess():
 
 @app.route("/")
 def start():
-    return render_template("challenge106.html")
+    return render_template("challenge106.html", question_answer_key = question_answer_key)
 
 @app.route("/login", methods = ["POST"])
 def login():
-        
-        if request.form.get("nm") == "42":
+        user_input = request.form.get("nm").upper()
+        if question_answer_key[user_input] == answer :
                 return redirect("/correct")
         else:
             return redirect("/incorrect")
